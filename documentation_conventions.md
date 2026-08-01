@@ -9,7 +9,7 @@ summary.
 Each `levelXX` directory contains:
 
 - `source`: a readable reconstruction of the original binary's relevant behavior.
-- `walkthrough`: the commands, observations, and reasoning needed to reproduce the solution.
+- `walkthrough.md`: the commands, observations, and reasoning needed to reproduce the solution.
 - `flag`: the password recovered for the next account.
 - `Ressources`: text-only analysis records, command output excerpts, and supporting notes.
 
@@ -20,7 +20,7 @@ No challenge binary or downloaded ISO file belongs in the repository.
 Record the recovered next-level password in the current level's `flag` whenever
 the challenge produces one. Leave `flag` empty only when no password can be
 recovered or the result is otherwise inapplicable. In that case, the
-`walkthrough` must state the reason.
+`walkthrough.md` must state the reason.
 
 For example, solving `level00` reveals `/home/users/level01/.pass`, so that
 password is recorded in `level00/flag`.
@@ -48,7 +48,7 @@ Each completed level contains only the following text artifacts:
 For every level, the evaluator can inspect:
 
 - `source` for a readable reconstruction of the binary behavior relevant to the exploit.
-- `walkthrough` for the observed reverse engineering, derived values, and verified demonstration.
+- `walkthrough.md` for the observed reverse engineering, derived values, and verified demonstration.
 - `flag` for the recovered next-account password, following the policy in `documentation_conventions.md`.
 - `Ressources/analysis.md` for selected disassembly and runtime evidence.
 
