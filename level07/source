@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+static unsigned int get_unum(void)
+{
+	char input[32];
+
+	fgets(input, sizeof(input), stdin);
+	return ((unsigned int)strtoul(input, NULL, 10));
+}
+
+static int store_number(unsigned int *numbers)
+{
+	unsigned int value;
+	unsigned int index;
+
+	printf(" Number: ");
+	value = get_unum();
+	printf(" Index: ");
+	index = get_unum();
+	if (index % 3 == 0 || (value >> 24) == 0xb7)
+	{
+		puts("*** ERROR! ***");
+		return (1);
+	}
+	numbers[index] = value;
+	return (0);
+}
+
+static int read_number(unsigned int *numbers)
+{
+	unsigned int index;
+
+	printf(" Index: ");
+	index = get_unum();
+	printf(" Number at data[%u] is %u\n", index, numbers[index]);
+	return (0);
+}
+
+int main(int argc, char **argv, char **envp)
+{
+	unsigned int numbers[100] = {0};
+	char command[20] = {0};
+	int status = 1;
+
+	while (*argv != NULL)
+	{
+		memset(*argv, 0, strlen(*argv));
+		argv++;
+	}
+	while (*envp != NULL)
+	{
+		memset(*envp, 0, strlen(*envp));
+		envp++;
+	}
+	while (1)
+	{
+		puts("Input command: ");
+		fgets(command, sizeof(command), stdin);
+		command[strlen(command) - 1] = '\0';
+		if (strcmp(command, "store") == 0)
+			status = store_number(numbers);
+		else if (strcmp(command, "read") == 0)
+			status = read_number(numbers);
+		else if (strcmp(command, "quit") == 0)
+			return (0);
+		if (status == 0)
+			printf("Completed %s command successfully\n", command);
+		else
+			printf("Failed to do %s command\n", command);
+		memset(command, 0, sizeof(command));
+	}
+}

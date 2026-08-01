@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct s_message
+{
+	char message[140];
+	char username[40];
+	int message_length;
+} t_message;
+
+static void secret_backdoor(void)
+{
+	char command[128];
+
+	fgets(command, sizeof(command), stdin);
+	system(command);
+}
+
+static void set_msg(t_message *message)
+{
+	char input[1024];
+
+	puts(">: Msg @Unix-Dude");
+	printf(">>: ");
+	fgets(input, sizeof(input), stdin);
+	strncpy(message->message, input, message->message_length);
+}
+
+static void set_username(t_message *message)
+{
+	char input[128] = {0};
+	int index;
+
+	puts(">: Enter your username");
+	printf(">>: ");
+	fgets(input, sizeof(input), stdin);
+	for (index = 0; index <= 40 && input[index] != '\0'; index++)
+		message->username[index] = input[index];
+	printf(">: Welcome, %s", message->username);
+}
+
+static void handle_msg(void)
+{
+	t_message message = {0};
+
+	message.message_length = 140;
+	set_username(&message);
+	set_msg(&message);
+	puts(">: Msg sent!");
+}
+
+int main(void)
+{
+	puts("--------------------------------------------");
+	puts("|   ~Welcome to l33t-m$n ~    v1337        |");
+	puts("--------------------------------------------");
+	handle_msg();
+	return (0);
+}

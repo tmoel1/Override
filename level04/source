@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <sys/ptrace.h>
+#include <sys/prctl.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+int main(void)
+{
+	char buffer[128] = {0};
+	pid_t child;
+	int status;
+	long syscall_number;
+
+	child = fork();
+	if (child == 0)
+	{
+		prctl(PR_SET_PDEATHSIG, SIGHUP);
+		ptrace(PTRACE_TRACEME, 0, NULL, NULL);
+		puts("Give me some shellcode, k");
+		gets(buffer);
+		return (0);
+	}
+	while (1)
+	{
+		wait(&status);
+		if (!WIFSTOPPED(status))
+		{
+			puts("child is exiting...");
+			return (0);
+		}
+		syscall_number = ptrace(PTRACE_PEEKUSER, child, 44, NULL);
+		if (syscall_number == 11)
+		{
+			puts("no exec() for you");
+			kill(child, SIGKILL);
+			return (0);
+		}
+	}
+}

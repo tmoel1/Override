@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+static void decrypt(int key)
+{
+	char encrypted[] = "\x51\x7d\x7c\x75\x60\x73\x66\x67\x7e\x73\x66\x7b\x7d\x7c\x61\x33";
+	size_t index;
+
+	for (index = 0; index < strlen(encrypted); index++)
+		encrypted[index] ^= key;
+	if (strncmp("Congratulations!", encrypted, 17) == 0)
+		system("/bin/sh");
+	else
+		puts("Invalid Password");
+}
+
+static void test(int input, int expected)
+{
+	int delta;
+
+	delta = expected - input;
+	if ((unsigned int)delta <= 0x15)
+		decrypt(delta);
+	else
+		decrypt(rand());
+}
+
+int main(void)
+{
+	int password;
+
+	srand(time(NULL));
+	puts("***********************************");
+	puts("*               level03         **");
+	puts("***********************************");
+	printf("Password:");
+	scanf("%d", &password);
+	test(password, 0x1337d00d);
+	return (0);
+}
